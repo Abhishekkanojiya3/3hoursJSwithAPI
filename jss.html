@@ -26,25 +26,17 @@
     -->
     <form class="row g-3" id="expForm">
         <div class="col-auto">
-            <label for="staticEmail2" class="visible">Choose Expenseamount:</label>
-            <input type="number" class="form-control" id="Expenseamount">
+            <label for="staticEmail2" class="visible">Selling price:</label>
+            <input type="number" class="form-control" id="Expenseamount" onclick="add();">
         </div>
         <div class="col-auto">
-            <label for="inputPassword2" class="visible">Choose Description:</label>
+            <label for="inputPassword2" class="visible">Product Name:</label>
             <input type="text" class="form-control" id="Description">
         </div>
         <div class="col-auto">
-            <label for="inputPassword1" class="visible">Choose a category:</label>
-            <select class="form-select" id="category">
-        <option>Grocery</option>
-        <option>Fuel</option>
-        <option>Food</option>
-        <option>Travel</option>
-      </select>
+            <button type="submit" class="btn btn-primary m-lg-4" onclick="add();">Add Product</button>
         </div>
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary m-lg-4">Add expense</button>
-        </div>
+        <h2> Total price: <span id="result"></span></h2>
     </form>
     <!-- <section class="content">
         <table class="table">
@@ -64,8 +56,9 @@
     <ul id="listOfUsers"></ul>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.0/axios.min.js"></script>
     <script>
+        var data = document.getElementById("Expenseamount").value
         document.getElementById('expForm').addEventListener('submit', addExpense);
-
+        document.getElementById("result").innerText = data;
         //const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
 
         function addExpense(e) {
@@ -74,15 +67,15 @@
 
             let Expenseamount = document.getElementById('Expenseamount').value;
             let Description = document.getElementById('Description').value;
-            let category = document.getElementById('category').value;
+            // let category = document.getElementById('category').value;
             console.log(Expenseamount, Description)
 
             //   if (Expenseamount > 0 &&
             //     Description.length > 0) {
             const expense = {
                     Expenseamount,
-                    Description,
-                    category
+                    Description
+                    //   category
                     //  id: expenses.length > 0 ? expenses[expenses.length - 1].id + 1 : 1,
                     // }
                     // expenses.push(expense);
@@ -109,6 +102,7 @@
                     console.log(response)
                     for (var i = 0; i < response.data.length; i++) {
                         showExpenses(response.data[i])
+                        add(response.data[i])
                     }
                 })
                 .catch((err) => {
@@ -120,9 +114,9 @@
 
             // const expenseTable = document.getElementById('expenseTable');
             const parentNode = document.getElementById('listOfUsers');
-            const childHTML = `<li id=${expe._id}> ${expe.Expenseamount} - ${expe.Description} - ${expe.category}
-                                    <button onclick=deleteExpense('${expe._id}')> Delete User </button>
-                                    <button onclick=editExpense('${expe.Expenseamount}','${expe.Description}','${expe.category}','${expe._id}')>Edit User </button>
+            const childHTML = `<li id=${expe._id}> ${expe.Expenseamount} - ${expe.Description}
+                                    <button onclick=deleteExpense('${expe._id}')> Delete </button>
+                            
                                  </li>`
 
             parentNode.innerHTML = parentNode.innerHTML + childHTML;
@@ -146,14 +140,14 @@
 
         // }
 
-        function editExpense(Expenseamount, Description, category, userid) {
+        // function editExpense(Expenseamount, Description, userid) {
 
-            document.getElementById('Expenseamount').value = Expenseamount;
-            document.getElementById('Description').value = Description;
-            document.getElementById('Category').value = category;
+        //     document.getElementById('Expenseamount').value = Expenseamount;
+        //     document.getElementById('Description').value = Description;
+        //    // document.getElementById('Category').value = category;
 
-            deleteExpense(userid)
-        }
+        //     deleteExpense(userid)
+        // }
 
         function deleteExpense(userid) {
             axios.delete(`https://crudcrud.com/api/dce9c9b4306847968d0cb3b552ee43b2/abhi/${userid}`)
@@ -172,6 +166,16 @@
                 // }
                 // localStorage.setItem('expenses', JSON.stringify(expenses));
 
+        }
+
+        function add() {
+            var inputs = document.getElementsByTagName("Expenseamount");
+            for (let i = 0; i <= inputs.length; i++) {
+                if (parseInt(inputs[i].value)) {
+                    inputs[i].value = '';
+                }
+            }
+            document.getElementById('total').value = total;
         }
 
 
